@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" charset="utf-8" src="teste_mario.js"></script>
+</head>
+
+<body onkeydown="mov_down(event)" onkeyup="mov_up()"bgcolor="#378de5">
+
+    <img id="mapa" width="0" height="0" src="Images/paisagem_quiz.png">
+    <img id="mario" width="0" height="0" src="Images/mario_quiz.png">
+    <img id="bloco" width="0" height="0" src="Images/bloco-removebg-preview.png">
+    <img id="help" width="0" height="0" src="Images/bloco-removebg-preview.png">
+    <img id="mar_direita" width="0" height="0" src="Images/Mario_direita.png">
+    <img id="mar_esquerda" width="0" height="0" src="Images/Mario_esquerda.png">
+    <img id="mario_normal" width="0" height="0" src="Images/Mario_normal.png">
+    <img id="mario_pula" width="0" height="0" src="Images/Mario_pula.png">
+    <img id="mario_run1" width="0" height="0" src="Images/mario_run1.png">
+    <img id="mario_run2" width="0" height="0" src="Images/mario_run2.png">
+    <img id="mario_run3" width="0" height="0" src="Images/mario_run3.png">
+    <img id="mario_run4" width="0" height="0" src="Images/mario_run4.png">
+    <img id="paisagem" width="0" height="0" src="Images/super_mario.png">
+
+<div align="center">
+    <canvas id="myCanvas" width="1800" height="1000" style="border:1px solid #d3d3d3;">
+        <h2 id="demo"></h2>
+        <h2 id="timer"></h2>
+    </canvas>
+</div>
+
+    <script>
+        var var_1 =Math.round(Math.floor(Math.random() * 21))
+        var var_2 =Math.round(Math.floor(Math.random() * 21))
+        var var_res1 = Math.round(Math.floor(Math.random() * 201))
+        var var_res2 = Math.round(Math.floor(Math.random() * 201))
+        var res =Math.round(Math.sqrt(var_res1+var_res2))
+
+        var vet = [res, var_1, var_2];
+        var new_array = shuffle(vet)
+
+
+        var bloco_r1 = vet[0]
+        var bloco_r2 = vet[1]
+        var bloco_r3 = vet[2]
+
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var mapa = document.getElementById("mapa");
+        var mario = document.getElementById("mario");
+        var bloco1 = document.getElementById("bloco");
+        var bloco2 = document.getElementById("bloco");
+        var bloco3 = document.getElementById("bloco");
+        var bloco4 = document.getElementById("help");
+        var mario_direita = document.getElementById("mar_direita");
+        var mario_esquerda = document.getElementById("mar_esquerda");
+        var mario_mario = document.getElementById("mario_normal");
+        var mario_pula = document.getElementById("mario_pula");
+        var img5 = document.getElementById("paisagem");
+
+        var sprite = [];
+        sprite[0] = document.getElementById("mario_run1");
+        sprite[1] = document.getElementById("mario_run2");
+        sprite[2] = document.getElementById("mario_run3");
+        sprite[3] = document.getElementById("mario_run4");
+        var ind_sprite = 0;
+        var mov_dir = false;
+        var mov_esq = false;
+
+        var keycode = 0
+        var dir = false
+
+        var x_player = 320
+        var y_player = 720
+
+        var x_bloco1 = 500
+        var y_bloco1 = 400
+
+        var x_bloco2 = 800
+        var y_bloco2 = 400
+
+        var x_bloco3 = 1100
+        var y_bloco3 = 400
+
+        var x_bloco4 = 0
+        var y_bloco4 = 400
+
+        var gravidade = 0.3;
+        var pulo = -13;
+        var chão = false;
+
+        var tempo_f = 18;
+
+
+        function Update() {
+
+            if (mov_esq) {
+                if (ind_sprite == 2) {
+                    mario = sprite[2];
+                } else if (ind_sprite == 3) {
+                    mario = sprite[3];
+                }
+
+                if (ind_sprite == 2)
+                    ind_sprite = 3;
+                else
+                    ind_sprite = 2;
+            }
+
+            if (mov_dir) {
+                if (ind_sprite == 0) {
+                    mario = sprite[0];
+                } else if (ind_sprite == 1) {
+                    mario = sprite[1];
+                }
+
+                if (ind_sprite == 0)
+                    ind_sprite = 1;
+                else
+                    ind_sprite = 0;
+            }
+
+            if (chão == true && dir == false){
+                mario = mario_mario;
+            }
+
+            if (chão == false) {
+                pulo -= gravidade;
+                y_player -= pulo;
+
+                if (y_player > 720) {
+                    y_player = 720;
+                    chão = true;
+                }
+            }
+
+            if (x_player <= -200) {
+                x_player = 1700
+            }
+            if (x_player >= 1900) {
+                x_player = 0
+            }
+
+
+
+            if ((x_player >= x_bloco1 - 40) && (x_player <= x_bloco1 + 40) && y_player <= 470) {
+                if(bloco_r1==res){
+                location.assign("mario_runner.html");
+                }else
+                {
+                    location.assign("index.html");
+                }
+                y_player = 720
+
+
+            }
+            if ((x_player >= x_bloco2 - 40) && (x_player <= x_bloco2 + 40) && y_player <= 470) {
+                if(bloco_r2==res)
+                {
+                    location.assign("mario_runner.html");
+                }else
+                {
+                    location.assign("index.html");
+                }
+                y_player = 720
+
+
+            }
+
+            if ((x_player >= x_bloco3 - 40) && (x_player <= x_bloco3 + 40) && y_player <= 470) {
+                if(bloco_r3==res)
+                {
+                    location.assign("mario_runner.html");
+                }
+                else
+                {
+                    location.assign("index.html");
+                }
+                y_player = 720
+
+
+            }
+
+            if ((x_player >= x_bloco4 - 40) && (x_player <= x_bloco4 + 40) && y_player <= 470) {
+                alert("Como jogar o jogo: Voce tem 18 segundos para responder a questao corretamente dentro das tres alternativas.\n\n Se voce responder corretamente voltará ao Mario Runner, se errar volta para o index")
+                y_player = 720
+
+            }
+
+            ctx.drawImage(mapa, 0, 0, 1800, 1000);
+            ctx.drawImage(mario, x_player, y_player, 100, 100);
+            ctx.drawImage(bloco1, x_bloco1, y_bloco1, 100, 100);
+            ctx.drawImage(bloco2, x_bloco2, y_bloco2, 100, 100);
+            ctx.drawImage(bloco3, x_bloco3, y_bloco3, 100, 100);
+            ctx.drawImage(bloco4, x_bloco4, y_bloco4, 100, 100);
+            ctx.font = "50px Georgia";
+            ctx.fillText("Questão: " +"√" + (var_res1+var_res2), 700, 100);
+            document.getElementById("timer").innerHTML =
+            ctx.fillText("Timer: "+Math.round(tempo_f), 200, 100)
+
+            document.getElementById("demo").innerHTML =
+            ctx.fillText(bloco_r1, 530, 400)
+            ctx.fillText(bloco_r2, 830, 400)
+            ctx.fillText(bloco_r3, 1130, 400)
+            ctx.fillText("Help",x_bloco4, y_bloco4)
+            ctx.drawImage(img5, 1550,20,200,100)
+
+           Math.round(tempo_f-=0.005)
+           if(tempo_f<0)
+           {
+            location.assign("index.html");
+           }
+        }
+        setInterval(Update, 7);
+        function mov_down(event) {
+            dir = true;
+            keycode = event.keyCode;
+            if (keycode == "32") {
+                mario = mario_pula;
+                if(chão == true){
+                    pulo = 13;
+                    chão = false;
+                }
+            } else if (keycode == "65") {
+                mario = mario_esquerda;
+                x_player -= 20
+                mov_esq = true;
+                ind_sprite = 3;
+            }
+            else if (keycode == "68") {
+                mario = mario_direita;
+                x_player += 20
+                mov_dir = true;
+                ind_sprite = 1;
+            }
+
+            
+        }
+
+        function mov_up(event) {
+            dir = false;
+            mov_dir = false;
+            mov_esq = false;
+        }
+
+        function shuffle(array) {
+            let currentIndex = array.length,  randomIndex;
+
+            
+            while (currentIndex != 0) {
+
+            
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+}
+
+return array;
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>
