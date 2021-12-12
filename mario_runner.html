@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<body onkeydown="OnKeyDown(event)" bgcolor="#378de5" >
+    <script type="text/javascript" charset="utf-8" src="Images/teste_mario.js"></script>
+    <img id="fundo" width="0" height="0" src="Images/paisagem.png">
+    <img id="mario" width="0" height="0" src="Images/mario.png">
+    <img id="goomba" width="0" height="0" src="Images/goomba.png">
+    <img id="bala" width="0" height="0" src="Images/bullet.png">
+    <img id="paisagem" width="0" height="0" src="Images/super_mario.png">
+    <img id="mario_run1" width="0" height="0" src="Images/mario_run1.png">
+    <img id="mario_run2" width="0" height="0" src="Images/mario_run2.png">
+
+<div align="center">
+    <canvas id="myCanvas" width="1200" height="800" style="border:1px solid #d3d3d3;">
+    <h1 id="pontuacao"> </h1>
+    </canvas>
+</div>
+
+    <script>
+
+        var random_level = Math.floor(Math.random() * 5)
+
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var fundo = document.getElementById("fundo");
+        var mario = document.getElementById("mario");
+        var img2 = document.getElementById("goomba");
+        var img3 = document.getElementById("bala");
+        var img4 = document.getElementById("goomba");
+        var img5 = document.getElementById("paisagem");
+        var img6 = document.getElementById("bala");
+
+        var sprite = [];
+        sprite[0] = document.getElementById("mario_run1");
+        sprite[1] = document.getElementById("mario_run2");
+        sprite[2] = document.getElementById("mario");
+        var ind_sprite = 0;
+
+        var keycode = 0;
+        var x_mario = 320, y_mario = 570;
+        var x_goomba = 900, y_goomba = 570;
+        var x_bala = 1000, y_bala = 400;
+        var x_goomba2 = 1100, y_goomba2 = 570;
+        var x_bala2 = 1200, y_bala2 = 400;
+        var vel1 = 2.5;
+        var vel2 = 2.5;
+        var vel3 = 5;
+        var vel4 = 4;
+        var dmax = -500;
+        var dmin = -100;
+        var r1 = getRandom(dmax, dmin);
+        var r2 = getRandom(dmax, dmin);
+        var r3 = getRandom(dmax, dmin);
+        var r4 = getRandom(dmax, dmin);
+
+        var pontuacao = 0;
+        var gravidade = 0.3;
+        var pulo = -13;
+        var chão = false;
+        var run = true;
+        
+        function Update() {
+
+            if (chão) {
+                if (ind_sprite == 0) {
+                    mario = sprite[0];
+                } else if (ind_sprite == 1) {
+                    mario = sprite[1];
+                }
+
+                if (ind_sprite == 0)
+                    ind_sprite = 1;
+                else
+                    ind_sprite = 0;
+            } else{
+                mario = sprite[2];
+            }
+
+            if (chão == false) {
+                pulo -= gravidade;
+                y_mario -= pulo;
+
+                if (y_mario > 570) {
+                    y_mario = 570;
+                    chão = true;
+                }
+            }
+
+            x_goomba = x_goomba - vel1;
+            if(x_goomba < r1){
+                r1 = getRandom(dmax, dmin);
+                x_goomba = 1000;
+            }
+
+            x_goomba2 = x_goomba2 - vel2;
+            if(x_goomba2 < r2){
+                r2 = getRandom(dmax, dmin);
+                x_goomba2 = 1200;
+            }
+            
+            x_bala = x_bala - vel3;
+            if(x_bala < r3){
+                r3 = getRandom(dmax, dmin);
+                vel3 = 5;
+                x_bala = 1100;
+            }
+
+            x_bala2 = x_bala2 - vel4;
+            if(x_bala2 < r4){
+                r4 = getRandom(dmax, dmin);
+                vel4 = 4;
+                x_bala2 = 1300;
+            }
+
+            if((x_bala > x_goomba) && (x_bala < x_goomba + 160) && (vel3 > vel1)){
+                vel3 = vel1;
+                x_bala += vel3
+            }
+
+            if((x_bala > x_goomba2) && (x_bala < x_goomba2 + 160) && (vel3 > vel2)){
+                vel3 = vel2;
+                x_bala += vel3
+            }
+
+            if((x_bala2 > x_goomba) && (x_bala2 < x_goomba + 160) && (vel4 > vel1)){
+                vel4 = vel1;
+                x_bala2 += vel4
+            }
+
+            if((x_bala2 > x_goomba2) && (x_bala2 < x_goomba2 + 160) && (vel4 > vel2)){
+                vel4 = vel2;
+                x_bala2 += vel4
+            }
+
+            if((x_bala > x_bala2) && (x_bala < x_bala2 + 320) && (vel3 > vel4)){
+                vel3 = vel4;
+            }
+
+            if((x_bala2 > x_bala) && (x_bala2 < x_bala + 320) && (vel4 > vel3)){
+                vel4 = vel3;
+            }
+
+            if(x_goomba == x_mario && y_mario == 570){
+                alert("Pontuacao: "+ pontuacao)
+                switch(random_level)
+                {
+                    case 0: location.assign("math_quiz.html");
+                        break;
+                    case 1: location.assign("math_quiz_2.html");
+                        break;
+                    case 2: location.assign("math_quiz_3.html");
+                        break;
+                    case 3: location.assign("math_quiz_4.html");
+                        break;
+                    case 4: location.assign("math_quiz_5.html");
+                        break;
+                }
+                x_bala = 1000
+                x_bala2 = 1200
+                x_goomba = 900
+                x_goomba2 = 1100
+                y_mario = 570
+            }
+
+            if(x_goomba2 == x_mario && y_mario == 570){
+                alert("Pontuacao: "+ pontuacao)
+                switch(random_level)
+                {
+                    case 0: location.assign("math_quiz.html");
+                        break;
+                    case 1: location.assign("math_quiz_2.html");
+                        break;
+                    case 2: location.assign("math_quiz_3.html");
+                        break;
+                    case 3: location.assign("math_quiz_4.html");
+                        break;
+                    case 4: location.assign("math_quiz_5.html");
+                        break;
+                }
+                x_bala = 1000
+                x_bala2 = 1200
+                x_goomba = 900
+                x_goomba2 = 1100
+                y_mario = 570
+            }
+
+            if(x_bala == x_mario && y_mario <= 400){
+                alert("Pontuacao: "+ pontuacao)
+                switch(random_level)
+                {
+                    case 0: location.assign("math_quiz.html");
+                        break;
+                    case 1: location.assign("math_quiz_2.html");
+                        break;
+                    case 2: location.assign("math_quiz_3.html");
+                        break;
+                    case 3: location.assign("math_quiz_4.html");
+                        break;
+                    case 4: location.assign("math_quiz_5.html");
+                        break;
+                }
+                x_bala = 1000
+                x_bala2 = 1200
+                x_goomba = 900
+                x_goomba2 = 1100
+                y_mario = 570
+            }
+
+            if((x_mario >= x_bala2 - 70) && (x_mario <= x_bala2 + 70) && y_mario <= 400){
+                alert("Pontuacao: "+ pontuacao)
+                switch(random_level)
+                {
+                    case 0: location.assign("math_quiz.html");
+                        break;
+                    case 1: location.assign("math_quiz_2.html");
+                        break;
+                    case 2: location.assign("math_quiz_3.html");
+                        break;
+                    case 3: location.assign("math_quiz_4.html");
+                        break;
+                    case 4: location.assign("math_quiz_5.html");
+                        break;
+                }
+                x_bala = 1000
+                x_bala2 = 1200
+                x_goomba = 900
+                x_goomba2 = 1100
+                y_mario = 570
+            }
+
+            ctx.clearRect(0,0,1200,800)
+            ctx.drawImage(fundo,0,0)
+            ctx.drawImage(img5, 375,20,500,300)
+            ctx.drawImage(mario, x_mario, y_mario, 86, 86)
+            ctx.drawImage(img2, x_goomba, y_goomba)
+            ctx.drawImage(img4,x_goomba2, y_goomba2)
+            ctx.drawImage(img3, x_bala, y_bala)
+            ctx.drawImage(img6, x_bala2, y_bala2)
+            ctx.font = "50px Arial";
+            document.getElementById("pontuacao").innerHTML =
+            ctx.fillText(pontuacao.toFixed(0), 100, 100)
+
+           pontuacao+=0.5
+        }
+        setInterval(Update, 7);
+
+        function OnKeyDown(event){
+                keycode = event.keyCode;
+
+            if(keycode == "32"){
+                if(chão == true){
+                pulo = 11;
+                chão = false;
+                } 
+            }
+        }
+        
+        function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+    </script>
+</body>
+</html>
