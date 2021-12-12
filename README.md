@@ -1,6 +1,6 @@
 # Projeto MarioRunner
 
-Projeto da matéria Desenvolvimento Web pelo Professor Alisson pelo Grupo 2
+Projeto da matéria PI: DESENVOLVIMENTO DE SISTEMAS WEB pelo Professor Alisson pelo Grupo 2
 
 # Alunos
 
